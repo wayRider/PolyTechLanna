@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                message.setText(R.string.title_home)
+                message.setText("@myHome")
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
