@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import com.google.firebase.database.FirebaseDatabase
 
 
 /**
@@ -25,6 +28,8 @@ class HomeFragment : Fragment() {
 
     private var mListener: OnFragmentInteractionListener? = null
 
+    lateinit var editText: EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
@@ -37,6 +42,22 @@ class HomeFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater!!.inflate(R.layout.fragment_home, container, false)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        editText = view!!.findViewById<EditText>(R.id.editText)
+
+        val button = view!!.findViewById<Button>(R.id.button)
+        button.setOnClickListener {
+
+            val database = FirebaseDatabase.getInstance()
+            val myRef = database.getReference("message")
+
+            myRef.setValue(editText.text.toString())
+
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

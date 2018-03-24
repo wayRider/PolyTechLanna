@@ -5,6 +5,10 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+
+
 
 class MainActivity : AppCompatActivity(),
         HomeFragment.OnFragmentInteractionListener,
@@ -27,7 +31,7 @@ class MainActivity : AppCompatActivity(),
                 }
                 val transaction = supportFragmentManager.beginTransaction()
                 transaction.replace(R.id.frameLayout, homeFragment)
-                transaction.addToBackStack(null)
+//                transaction.addToBackStack(null)
                 transaction.commit()
                 return@OnNavigationItemSelectedListener true
             }
@@ -43,7 +47,7 @@ class MainActivity : AppCompatActivity(),
                 }
                 val transaction = supportFragmentManager.beginTransaction()
                 transaction.replace(R.id.frameLayout, contactFragment)
-                transaction.addToBackStack(null)
+//                transaction.addToBackStack(null)
                 transaction.commit()
                 return@OnNavigationItemSelectedListener true
             }
@@ -60,7 +64,9 @@ class MainActivity : AppCompatActivity(),
         homeFragment = HomeFragment()
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frameLayout, homeFragment)
-        transaction.addToBackStack(null)
+//        transaction.addToBackStack(null)
         transaction.commit()
+
+
     }
 }
