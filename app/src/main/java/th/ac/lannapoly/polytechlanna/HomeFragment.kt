@@ -4,12 +4,14 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.fragment_home.*
 
 
 /**
@@ -28,7 +30,7 @@ class HomeFragment : Fragment() {
 
     private var mListener: OnFragmentInteractionListener? = null
 
-    lateinit var editText: EditText
+    lateinit var myRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,17 +49,32 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        editText = view!!.findViewById<EditText>(R.id.editText)
+        val database = FirebaseDatabase.getInstance()
+        myRef = database.getReference("message")
 
-        val button = view!!.findViewById<Button>(R.id.button)
-        button.setOnClickListener {
+        myRef.addValueEventListener(object:ValueEventListener{
+            override fun onCancelled(p0: DatabaseError?) {
 
-            val database = FirebaseDatabase.getInstance()
-            val myRef = database.getReference("message")
+            }
 
+            override fun onDataChange(dataSnapshot: DataSnapshot?) {
+                if(dataSnapshot != null){
+                    val message = dataSnapshot.getValue(String::class.java)
+                    textView.text = message
+                }
+
+//                dataSnapshot.let { d ->
+//
+//                }
+            }
+
+        })
+
+
+        button.setOnClickListener{
             myRef.setValue(editText.text.toString())
-
         }
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
