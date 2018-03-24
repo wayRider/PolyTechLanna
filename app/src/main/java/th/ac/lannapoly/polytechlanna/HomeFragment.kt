@@ -10,8 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import com.firebase.ui.database.FirebaseListAdapter
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import th.ac.lannapoly.polytechlanna.model.News
 
 
 /**
@@ -32,11 +34,15 @@ class HomeFragment : Fragment() {
 
     lateinit var myRef: DatabaseReference
 
+    var newses: ArrayList<News> = ArrayList()
+
+    lateinit var adapter: FirebaseListAdapter<News>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
-            mParam1 = arguments.getString(ARG_PARAM1)
-            mParam2 = arguments.getString(ARG_PARAM2)
+            mParam1 = arguments!!.getString(ARG_PARAM1)
+            mParam2 = arguments!!.getString(ARG_PARAM2)
         }
     }
 
@@ -50,7 +56,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val database = FirebaseDatabase.getInstance()
-        myRef = database.getReference("message")
+        myRef = database.getReference("news")
 
         myRef.addValueEventListener(object:ValueEventListener{
             override fun onCancelled(p0: DatabaseError?) {
@@ -59,13 +65,14 @@ class HomeFragment : Fragment() {
 
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 if(dataSnapshot != null){
-                    val message = dataSnapshot.getValue(String::class.java)
-                    textView.text = message
+                    newses = ArrayList()
+                    for (newsSnapshot in dataSnapshot.children) {
+                        val news = newsSnapshot.getValue(News::class.java)
+                        if (news != null) {
+                            newses.add(news)
+                        }
+                    }
                 }
-
-//                dataSnapshot.let { d ->
-//
-//                }
             }
 
         })
@@ -74,6 +81,10 @@ class HomeFragment : Fragment() {
         button.setOnClickListener{
             myRef.setValue(editText.text.toString())
         }
+
+//        adapter = FirebaseListAdapter<News>(context,News::class.java,android.R.layout.simple_list_item_1,myRef){
+//
+//        }
 
     }
 
