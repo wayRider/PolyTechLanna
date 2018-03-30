@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import com.firebase.ui.database.FirebaseListAdapter
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -56,7 +57,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val database = FirebaseDatabase.getInstance()
-        myRef = database.getReference("news")
+        myRef = database.getReference("newses")
 
         myRef.addValueEventListener(object:ValueEventListener{
             override fun onCancelled(p0: DatabaseError?) {
@@ -77,10 +78,16 @@ class HomeFragment : Fragment() {
 
         })
 
-
-        button.setOnClickListener{
-            myRef.setValue(editText.text.toString())
+        adapter = object : FirebaseListAdapter<News>(context,News::class.java,R.layout.row_news,myRef){
+            override fun populateView(v: View?, model: News?, position: Int) {
+                val titleTextView = v!!.findViewById<TextView>(R.id.titleTextView)
+                titleTextView.text=model!!.title
+            }
         }
+        listView.adapter = adapter
+   //     button.setOnClickListener{
+    //        myRef.setValue(editText.text.toString())
+    //    }
 
 //        adapter = FirebaseListAdapter<News>(context,News::class.java,android.R.layout.simple_list_item_1,myRef){
 //
